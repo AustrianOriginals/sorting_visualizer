@@ -1,6 +1,14 @@
 import random
 import matplotlib.pyplot as plt
 import time
+from matplotlib.widgets import Button
+
+# Define Big O notation for each sorting algorithm
+BIG_O = {
+    "Bubble Sort": "O(n²)",
+    "Selection Sort": "O(n²)",
+    "Insertion Sort": "O(n²) avg / O(n) best",
+}
 
 #Initialize time variables
 bubble_time = [0.0]
@@ -64,8 +72,36 @@ selection_gen = minimal_sort(data_minimal, selection_steps, selection_time)
 insertion_gen = insertion_sort(data_insertion, insertion_steps, insertion_time)
 elapsed = [0.0, 0.0, 0.0]
 
+#resetbutton
+reset_ax = plt.axes([0.4, 0.02, 0.2, 0.05])
+reset_button = Button(reset_ax, "Reset")
+
+def reset(event):
+    global data_bubble, data_minimal, data_insertion
+    global bubble_gen, selection_gen, insertion_gen
+
+    original = [random.randint(1, 100) for _ in range(20)]
+
+    data_bubble = original.copy()
+    data_minimal = original.copy()
+    data_insertion = original.copy()
+
+    bubble_steps[0] = 0
+    selection_steps[0] = 0
+    insertion_steps[0] = 0
+
+    bubble_time[0] = 0
+    selection_time[0] = 0
+    insertion_time[0] = 0
+
+    bubble_gen = bubble_sort(data_bubble, bubble_steps, bubble_time)
+    selection_gen = minimal_sort(data_minimal, selection_steps, selection_time)
+    insertion_gen = insertion_sort(data_insertion, insertion_steps, insertion_time)
+
+#Visualisation loop
 while True:
     updated = False
+    reset_button.on_clicked(reset)
 
     for ax, gen, data, title, steps, elapsed in [
         (axs[0], bubble_gen, data_bubble, "Bubble Sort", bubble_steps, bubble_time),
@@ -76,8 +112,16 @@ while True:
             next(gen)
             ax.clear()
             ax.bar(range(len(data)), data)
-            ax.set_title(f"{title}\nSteps: {steps[0]} | Time: {elapsed[0]:.2f}s")
+            ax.set_title(
+                f"{title} ({BIG_O[title]})\n"
+                f"Steps: {steps[0]} | Time: {elapsed[0]:.4f}s"
+            )
+
             updated = True
         except StopIteration:
-            ax.set_title(f"{title} (Done)\nSteps: {steps[0]} | Time: {elapsed[0]:.2f}s")
+            ax.set_title(
+                f"{title} ({BIG_O[title]})\n"
+                f"Steps: {steps[0]} | Time: {elapsed[0]:.4f}s"
+            )
+
     plt.pause(0.1)
