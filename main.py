@@ -21,7 +21,7 @@ selection_steps = [0]
 insertion_steps = [0]
 
 # Generate random data
-original_data = [random.randint(1, 100) for _ in range(20)]
+original_data = [random.randint(1, 100) for _ in range(100)]
 
 data_bubble = original_data.copy()
 data_minimal = original_data.copy()
