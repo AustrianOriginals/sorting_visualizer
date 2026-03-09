@@ -8,11 +8,14 @@ This application is designed for education, demos, and internal technical presen
 
 ## Overview
 
-The visualizer renders three synchronized bar charts from the same randomly generated dataset:
+The visualizer renders six synchronized bar charts from the same randomly generated dataset:
 
 - Bubble Sort
 - Selection Sort
 - Insertion Sort
+- Merge Sort
+- Quick Sort
+- Heap Sort
 
 Each algorithm runs independently as a generator, allowing step-by-step updates in real time while preserving visual comparability.
 
@@ -20,12 +23,15 @@ Each algorithm runs independently as a generator, allowing step-by-step updates 
 
 ## Current Capabilities
 
-- Side-by-side live visualization for 3 sorting algorithms
+- Side-by-side live visualization for 6 sorting algorithms
 - Shared input dataset for fair comparison
 - Real-time operation (step) counters
+- Real-time write operation tracking
 - Real-time elapsed time display per algorithm
 - Big-O notation shown in each chart title
 - Reset control to generate a new dataset and restart all algorithms
+- Color-coded charts for easy identification
+- 2x3 grid layout for optimal viewing
 
 ---
 
@@ -36,6 +42,9 @@ Each algorithm runs independently as a generator, allowing step-by-step updates 
 | Bubble Sort | O(n) | O(n²) | O(n²) |
 | Selection Sort | O(n²) | O(n²) | O(n²) |
 | Insertion Sort | O(n) | O(n²) | O(n²) |
+| Merge Sort | O(n log n) | O(n log n) | O(n log n) |
+| Quick Sort | O(n log n) | O(n log n) | O(n²) |
+| Heap Sort | O(n log n) | O(n log n) | O(n log n) |
 
 > Note: The UI displays simplified complexity labels taken from the script constants.
 
@@ -43,10 +52,13 @@ Each algorithm runs independently as a generator, allowing step-by-step updates 
 
 ## Technical Notes
 
-- Built with Python and Matplotlib interactive mode (`plt.ion()`)
-- Update loop advances each generator one step per frame (`plt.pause(0.1)`)
-- Step counters are incremented during key operations in each algorithm implementation
-- Elapsed time is measured using `time.perf_counter()`
+- Built with Python 3.12+ and Matplotlib interactive mode (`plt.ion()`)
+- Clean architecture with dataclasses (`SortMetrics`, `AlgorithmState`)
+- Update loop advances each generator one step per frame (`plt.pause(0.02)`)
+- Step counters track comparison operations, write counters track array modifications
+- Elapsed time measured using `time.perf_counter()`
+- Type hints throughout for maintainability
+- Modular design for easy algorithm addition
 
 ---
 
@@ -76,16 +88,16 @@ python main.py
 ## Usage
 
 1. Launch the app.
-2. Observe the three sorting panels updating in parallel.
+2. Observe the six sorting panels (2x3 grid) updating in parallel.
 3. Review each panel title for:
-	- Algorithm name
-	- Big-O reference
-	- Current step count
-	- Elapsed runtime
-4. Click **Reset** to generate a new random dataset and restart all algorithms.
-
----
-
+   - Algorithm name
+   - Big-O reference
+   - Current status (Running/Done)
+   - Step count (comparisons)
+   - Write count (array modifications)
+   - Elapsed runtime
+4. Click **Reset Dataset** to generate a new random dataset and restart all algorithms.
+5. Close the window to exit the application.
 ## Project Structure
 
 ```text
@@ -106,11 +118,14 @@ sorting_visualizer/
 
 ## Future Enhancements (Recommended)
 
-- Add additional algorithms (Merge, Quick, Heap)
-- Add configurable dataset size and speed controls
+- Add configurable dataset size slider
+- Add speed control (animation delay adjustment)
 - Add pause/resume and single-step mode
-- Export benchmark results to CSV
+- Add additional algorithms (Radix, Shell, Cocktail, Comb)
+- Export benchmark results to CSV or JSON
+- Add ability to load custom datasets
 - Package as an executable for non-technical users
+- Add color highlighting for active comparisons/swaps
 
 ---
 
